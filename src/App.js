@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   return (
     <div className="App">
-    <h1>USER DB REDUX</h1>
+    <h1>USER DB REDUX 8</h1>
     </div>
   );
 }
