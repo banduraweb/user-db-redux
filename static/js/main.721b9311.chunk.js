@@ -1,2 +1,0 @@
-(this["webpackJsonpuser-db-redux"]=this["webpackJsonpuser-db-redux"]||[]).push([[0],{3:function(e,n,t){e.exports=t(9)},9:function(e,n,t){"use strict";t.r(n);var r=t(0),a=t.n(r),u=t(2),s=t.n(u);t(8);var c=function(){return a.a.createElement("div",{className:"App"},a.a.createElement("h1",null,"USER DB REDUX"))};s.a.render(a.a.createElement(c,null),document.getElementById("root"))}},[[3,1,2]]]);
-//# sourceMappingURL=main.721b9311.chunk.js.map
