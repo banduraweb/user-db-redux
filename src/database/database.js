@@ -10,5 +10,3 @@ db.open().catch(err => {
 
     console.log(err.stack || err);
 });
-
-

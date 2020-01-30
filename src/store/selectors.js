@@ -14,8 +14,8 @@ export const selectUsers = createSelector(
 );
 
 
-export const selectFormData = createSelector(
+export const statusLoading = createSelector(
     rootSelector,
-    ({ form }) => form
+    ({ isLoading }) => isLoading
 
 );

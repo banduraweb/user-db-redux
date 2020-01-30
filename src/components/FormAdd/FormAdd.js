@@ -57,7 +57,7 @@ const FormAdd = props => {
                            validate={[required, requiredAge]}
                            component={renderInputNumber}
                            type="number"
-                           placeholder="Age"
+
                     >
                     </Field>
                 </div>
@@ -84,7 +84,7 @@ const FormAdd = props => {
 };
 
 export default reduxForm({
-    form: 'simple',
+    form: 'addUserForm',
 })(FormAdd);
 
 

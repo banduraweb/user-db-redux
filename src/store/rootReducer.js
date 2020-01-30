@@ -3,24 +3,20 @@ import { ACTION_TYPES } from './actions';
 import { reducer as reduxFormReducer } from 'redux-form';
 
 export const initialState = {
-    usersData: null,
+    usersData: [],
 };
 
- const rootReducer = (state = initialState, action) => {
+ const rootReducer = (state = [], action) => {
     switch (action.type) {
         case ACTION_TYPES.GET_USERS: {
-
             const {payload} = action;
-
             return {
                 ...state,
                 usersData: payload
             };
         }
-        case ACTION_TYPES.DATA_GET_SUCCESS: {
-
+        case ACTION_TYPES.DATA_ADD_SUCCESS: {
             const {payload} = action;
-
             return {
                 ...state,
                 usersData: [...state.usersData, payload ]
@@ -31,8 +27,28 @@ export const initialState = {
     }
 };
 
+
+
+
+const loadingReducer = (state = false, action) => {
+    switch (action.type) {
+        case ACTION_TYPES.START_LOADING: {
+            return true
+        }
+        case ACTION_TYPES.STOP_LOADING: {
+            return false
+        }
+        default:
+            return state;
+    }
+};
+
+
+
+
 export const rootReducer2 = combineReducers({
     usersData: rootReducer,
-    form: reduxFormReducer.plugin({})
+    isLoading: loadingReducer,
+    form: reduxFormReducer
 });
 
