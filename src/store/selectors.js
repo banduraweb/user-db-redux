@@ -19,3 +19,9 @@ export const statusLoading = createSelector(
     ({ isLoading }) => isLoading
 
 );
+
+
+export const selectQueryUseratList = createSelector(
+    rootSelector,
+    ({ query }) => query
+);

@@ -1,55 +1,53 @@
 import React, {useState} from 'react';
 import {USERS_TYPES_DATA} from "../../constants/form-fields";
 import {Table, Button} from "react-bootstrap";
-import { useSelector } from 'react-redux';
-import {selectUsers, statusLoading} from "../../store/selectors";
+import { useSelector, useDispatch } from 'react-redux';
+import {selectQueryUseratList, selectUsers} from "../../store/selectors";
 import { Spinner } from "react-bootstrap";
+import {renderData} from "../../sorting/SortingUsers";
+import {db} from "../../database/database";
+import * as actions from "../../store/actions";
 
 
 const TableData=()=>{
 
     const users = useSelector(state => selectUsers(state));
-    const getLoadStatus = useSelector(state => statusLoading(state));
+    const query = useSelector(state => selectQueryUseratList(state));
+    const dispatch = useDispatch();
     const {usersData} = users;
 
-    console.log(getLoadStatus, usersData, '-----...');
-    console.log(usersData === undefined,'undefined');
+    const [selectedParams, setSelected] = useState({sortField: null, arrowSort: null});
 
+    const getSortParams =({target})=>{
 
-    const [selectedParams, setSelected] = useState({sortType: '', isSelected: false });
-
-
-    const getSortParams =(e)=>{
-        const sortQuery = e.target.name;
+        const sortField = target.name;
+        const arrowSort = target.value;
+        console.log(sortField);
         setSelected({
-            sortType: sortQuery,
-            isSelected: !isSelected
+            sortField,
+            arrowSort,
         });
 
+    };
+
+    const deleteUserFromDB=async(id)=>{
+            db.userDataBase.delete(id);
+            let allUsers = await db.userDataBase.toArray();
+            dispatch(actions.deleteUser(allUsers));
+            setTimeout(()=>{
+                dispatch(actions.loadUsers());
+            },1000);
+
 
     };
-    const {sortType, isSelected} = selectedParams;
-    console.log(selectedParams);
 
-    const renderData = (dataArray)=> {
-        if ((dataArray[0][sortType])) {
-            switch (!isNaN(dataArray[0][sortType])) {
-                case true:
-                    return [...dataArray].sort((a, b) => {
-                        const isReversed = !isSelected ? 1 : -1;
-                        return isReversed * (+a[sortType] - (+b[sortType]))
-                    });
-                case false:
-                    return [...dataArray].sort((a, b) => {
-                        const isReversed = !isSelected ? 1 : -1;
-                        return isReversed * a[sortType].localeCompare(b[sortType])
-                    });
-                default:
-                    return dataArray
-            }
-        }
-        return dataArray
-    };
+
+     const {sortField, arrowSort} = selectedParams;
+    const visibleUsers = query === ''
+        ? usersData
+        : usersData.filter(({ FIRST_NAME, LAST_NAME }) => (FIRST_NAME + LAST_NAME)
+            .toLowerCase()
+            .includes(query.toLowerCase()));
 
     return(
         <>
@@ -60,30 +58,31 @@ const TableData=()=>{
                 : usersData.length === 0
                     ? <h1 className="d-flex justify-content-center">Data Base is Empty</h1>
                     :
-                <Table striped bordered hover variant="dark" responsive="sm" id="table"
+                <Table striped bordered hover variant="dark" responsive="sl" id="table"
                        className="table-custom table-responsive">
                     <thead>
                     <tr>
                         <th>#</th>
                         {Object.keys(USERS_TYPES_DATA).map(elem => {
                             return (
-                                <th key={elem}>
+                                <th key={elem} className="table-header">
                                     {elem.replace(/_/g, ' ')}&#8195;
-                                    <Button className="btn_search btn_sort"
-                                            variant="outline-info">
-                                        <label className="btn_search"
+                                    <p className="btn-container">
+                                        <Button className="btn_search btn_sort"
+                                                name={elem}
+                                                value="up"
+                                                onClick={(e)=>getSortParams(e)}
+                                        >&#8593;
 
-                                        >
-                                            <i className="fas fa-sort"></i>
-                                        <input id="checkbox"
-                                               type="checkbox"
-                                               name={elem}
-                                               checked={sortType === elem}
-                                               onChange={(e)=>{getSortParams(e)}}
-                                        />
-                                        </label>
-                                    </Button>
+                                        </Button>
 
+                                        <Button className="btn_search btn_sort"
+                                                name={elem}
+                                                value="down"
+                                                onClick={(e)=>getSortParams(e)}
+                                        >&#8595;
+                                        </Button>
+                                    </p>
                                 </th>
                             )
 
@@ -94,7 +93,7 @@ const TableData=()=>{
                     <tbody>
                     {
 
-                        renderData(usersData).map(
+                        renderData(visibleUsers, sortField, arrowSort).map(
                             ({_id, FIRST_NAME, LAST_NAME, PHONE, GENDER, AGE}, idx) => (
 
                                 <tr key={_id}>
@@ -105,9 +104,11 @@ const TableData=()=>{
                                     <td>{GENDER}</td>
                                     <td>{AGE}</td>
                                     <td>{_id}
-                                        <Button
+                                    <p className="delete-user-block">
+                                        <Button onClick={()=>{deleteUserFromDB(_id)}}
                                             variant="info">delete user
                                         </Button>
+                                    </p>
                                     </td>
 
                                 </tr>

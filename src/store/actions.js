@@ -1,11 +1,15 @@
 import {db} from "../database/database";
 
+
+
 export const ACTION_TYPES = {
     GET_USERS: 'GET_USERS',
     DATA_ADD_SUCCESS: "DATA_ADD_SUCCESS",
     START_LOADING: "START_LOADING",
     STOP_LOADING: "STOP_LOADING",
     SET_LOAD_ERROR: 'SET_LOAD_ERROR',
+    DELETE_USER: 'DELETE_USER',
+    SEARCH_USER: "SEARCH_USER"
 };
 
 const setErrorLoad = error => ({
@@ -37,6 +41,16 @@ export const addUser = (data) => {
     };
 };
 
+export const deleteUser = data => ({
+    type: ACTION_TYPES.DELETE_USER,
+    data,
+});
+
+
+export const searchQueryUsers = value => ({
+    type: ACTION_TYPES.SEARCH_USER,
+    payload: value,
+});
 
 
 export const loadUsers = () => async(dispatch) => {

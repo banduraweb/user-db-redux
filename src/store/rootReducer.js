@@ -22,6 +22,15 @@ export const initialState = {
                 usersData: [...state.usersData, payload ]
             };
         }
+
+        case ACTION_TYPES.DELETE_USER: {
+            const {payload} = action;
+            return {
+                ...state,
+                usersData: payload
+            };
+        }
+        
         default:
             return state;
     }
@@ -46,9 +55,24 @@ const loadingReducer = (state = false, action) => {
 
 
 
+const queryReducer = (state = '', action) => {
+    switch (action.type) {
+        case ACTION_TYPES.SEARCH_USER: {
+            const {payload} = action;
+            console.log(payload);
+            return payload
+
+        }
+        default:
+            return state;
+    }
+};
+
+
 export const rootReducer2 = combineReducers({
     usersData: rootReducer,
     isLoading: loadingReducer,
+    query: queryReducer,
     form: reduxFormReducer
 });
 

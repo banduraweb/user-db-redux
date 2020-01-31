@@ -46,6 +46,7 @@ background-color: #ffdce0;
 }
 
 .table-custom {
+    text-align: center;
     border-radius: 5px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -55,7 +56,19 @@ span {
 }
 
 .btn_sort {
-    width: 1vw;
+    width: 3vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.delete-user-block {
     display: flex;
     flex-direction: column;
     align-items: center;

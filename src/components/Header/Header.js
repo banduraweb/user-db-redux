@@ -2,9 +2,18 @@ import React from "react";
 import { Form, Navbar, Nav } from "react-bootstrap";
 import { DebounceInput } from 'react-debounce-input';
 import {db} from "../../database/database";
+import { useDispatch } from 'react-redux';
+import * as actions from '../../store/actions';
+
 const Header = () => {
+    const dispatch = useDispatch();
     const preventEvent=(e)=>{
         e.preventDefault()
+    };
+
+    const getQuerySearchParam =({target})=>{
+        const param = target.value;
+        dispatch(actions.searchQueryUsers(param))
     };
 
     return (
@@ -16,7 +25,7 @@ const Header = () => {
                 </Nav>
                 <Form inline onSubmit={preventEvent}>
                     <DebounceInput
-                        onChange={()=>{}}
+                        onChange={(e)=>{getQuerySearchParam(e)}}
                         debounceTimeout={700}
                         type="text"
                         placeholder="Search by name"
