@@ -1,5 +1,9 @@
 export const renderData = (dataArray,field, arrowSort)=> {
-    if ((dataArray[0][field])) {
+
+    if ((!dataArray[0])) {
+        return dataArray
+    }
+    else if ((dataArray[0][field])) {
         switch (!isNaN(dataArray[0][field])) {
             case true:
                 return arrowSort === "up" ?
